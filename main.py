@@ -60,17 +60,20 @@ try:
             # Button event
             if event.type == pygame.JOYBUTTONDOWN:
                 print(f"Key {event.button} Down")
-                control_val[key_map[event.button]] = 1
+                if event.button in key_map:
+                    control_val[key_map[event.button]] = 1
             elif event.type == pygame.JOYBUTTONUP:
                 print(f"Key {event.button} Up")
-                control_val[key_map[event.button]] = 0
+                if event.button in key_map:
+                    control_val[key_map[event.button]] = 0
 
             # Trigger and Joystick event
             if event.type == pygame.JOYAXISMOTION:
                 for axis in range(joystick.get_numaxes()):
                     axis_value = joystick.get_axis(axis)
                     print(f"Handle {axis} value: {axis_value:.2f}")
-                    control_val[handle_map[axis]] = axis_value
+                    if axis in handle_map:
+                        control_val[handle_map[axis]] = axis_value
 
             # Hat event
             # if event.type == pygame.JOYHATMOTION:
@@ -106,8 +109,8 @@ try:
             gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
 
 
-        gamepad.left_trigger_float(value_float=control_val["LEFT_TRIGGER"])
-        gamepad.right_trigger_float(value_float=control_val["RIGHT_TRIGGER"])
+        gamepad.left_trigger_float(value_float=control_val["LEFT_TRIGGER"] > -0.95)
+        gamepad.right_trigger_float(value_float=control_val["RIGHT_TRIGGER"] > -0.95)
         gamepad.left_joystick_float(x_value_float=control_val["LEFT_JOYSTICK_X"], y_value_float=control_val["LEFT_JOYSTICK_Y"])
         gamepad.right_joystick_float(x_value_float=control_val["RIGHT_JOYSTICK_X"], y_value_float=control_val["RIGHT_JOYSTICK_Y"])
 
